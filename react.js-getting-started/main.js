@@ -1,69 +1,95 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios-es6';
 
-const Card = (props) => {
+
+const Stars = (props) => {
+    const numberOfStars = 1 + Math.floor(Math.random() * 9);
+
+    let stars = [];
+    for (let i = 0; i < numberOfStars; i++) {
+        stars.push(<i className="fa fa-star"></i>);
+    }
+
     return (
-        <div>
-            <img width="75" src={props.avatar_url} />
-            <div style={{ display: 'inline-block', marginLeft: 10 }}>
-                <div style={{ fontSize: '1.25em', fontWeight: 'bold' }}>
-                    {props.name}
-                </div>
-                <div>{props.company}</div>
+        <div className="col-5">
+            {stars}
+        </div>
+    );
+}
+
+const Button = (props) => {
+    return (
+        <div className="col-2">
+            <button>=</button>
+        </div>
+    );
+}
+
+const Answer = (props) => {
+    return (
+        <div className="col-5">
+            {props.selectedNumbers.map((number, i) =>
+                <span key={i}>{number}</span>
+            )}
+        </div>
+    );
+}
+
+const Numbers = (props) => {
+    let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    const numberClassName = (number) => {
+        if (props.selectedNumbers.indexOf(number) >= 0) {
+            return 'selected';
+        }
+    }
+
+    return (
+        <div className="card text-center">
+            <div>
+                {numbers.map((number, i) =>
+                    <span onClick={() => props.selectNumber(number)} key={i} className={numberClassName(number)}>{number}</span>
+                )}
             </div>
         </div>
     );
 }
 
-const CardList = (props) => {
-    return (
-        <div>
-            {props.cards.map(card => <Card key={card.id}{...card} />)}
-        </div>
-    );
-};
 
-class Form extends React.Component {
-    state = { userName: '' }
-    handleSubmit = (event) => {
-        event.preventDefault();
-        axios.get('https://api.github.com/users/' + this.state.userName).then((resp) => {
-            this.props.onSubmit(resp.data);
-            this.setState({ userName: '' });
-        });
+class Game extends React.Component {
+    state = {
+        selectedNumbers: []
     };
 
+    selectNumber = (clickedNumber) => {
+        this.setState(prevState => ({
+            selectedNumbers: prevState.selectedNumbers.concat(clickedNumber)
+        }));
+    };
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <input type="text"
-                    value={this.state.userName}
-                    onChange={(event) => this.setState({ userName: event.target.value })}
-                    placeholder="GitHub Username" required />
-                <button type="submit">Add a Card!</button>
-            </form>
+            <div className="container">
+                <h3>Play Nine</h3>
+                <hr />
+                <div className="row">
+                    <Stars />
+                    <Button />
+                    <Answer selectedNumbers={this.state.selectedNumbers} />
+                </div>
+                <br />
+                <Numbers selectNumber={this.selectNumber} selectedNumbers={this.state.selectedNumbers} />
+            </div>
         );
     }
 }
 
+
 class App extends React.Component {
-    state = {
-        cards: []
-    };
-
-    addNewCard = (cardInfo) => {
-        this.setState(prevState => ({
-            cards: prevState.cards.concat(cardInfo)
-        }))
-    };
-
     render() {
         return (
             <div>
-                <Form onSubmit={this.addNewCard} />
-                <CardList cards={this.state.cards} />
+                <Game />
             </div>
         );
     }
