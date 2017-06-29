@@ -3,10 +3,8 @@ import ReactDOM from 'react-dom';
 
 
 const Stars = (props) => {
-    const numberOfStars = 1 + Math.floor(Math.random() * 9);
-
     let stars = [];
-    for (let i = 0; i < numberOfStars; i++) {
+    for (let i = 0; i < props.numberOfStars; i++) {
         stars.push(<i className="fa fa-star"></i>);
     }
 
@@ -29,7 +27,7 @@ const Answer = (props) => {
     return (
         <div className="col-5">
             {props.selectedNumbers.map((number, i) =>
-                <span key={i}>{number}</span>
+                <span onClick={() => props.unSelectNumber(number)} key={i}>{number}</span>
             )}
         </div>
     );
@@ -58,24 +56,33 @@ const Numbers = (props) => {
 
 class Game extends React.Component {
     state = {
-        selectedNumbers: []
+        selectedNumbers: [],
+        numberOfStars: 1 + Math.floor(Math.random() * 9)
     };
 
     selectNumber = (clickedNumber) => {
+        if (this.state.selectedNumbers.indexOf(clickedNumber) >= 0) { return 0; }
         this.setState(prevState => ({
             selectedNumbers: prevState.selectedNumbers.concat(clickedNumber)
         }));
     };
 
+    unSelectNumber = (clickedNumber) => {
+        this.setState(prevState => ({
+            selectedNumbers: prevState.selectedNumbers.filter(number => number !== clickedNumber)
+        }));
+    };
+
     render() {
+        const { selectedNumbers, numberOfStars } = this.state;
         return (
             <div className="container">
                 <h3>Play Nine</h3>
                 <hr />
                 <div className="row">
-                    <Stars />
+                    <Stars numberOfStars={this.state.numberOfStars} />
                     <Button />
-                    <Answer selectedNumbers={this.state.selectedNumbers} />
+                    <Answer unSelectNumber={this.unSelectNumber} selectedNumbers={this.state.selectedNumbers} />
                 </div>
                 <br />
                 <Numbers selectNumber={this.selectNumber} selectedNumbers={this.state.selectedNumbers} />
