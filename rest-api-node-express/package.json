@@ -1,0 +1,16 @@
+{
+    "name": "rest-api-test",
+    "version": "1.0.0",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node app"
+    },
+    "dependencies": {
+        "express": "4.15.2",
+        "body-parser": "1.17.1",
+        "request": "2.81.0"
+    },
+    "author": "Patricio Ferraggi",
+    "license": "ISC"
+}

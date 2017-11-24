@@ -1,0 +1,22 @@
+{
+    "name": "mean-app",
+    "version": "1.0.0",
+    "description": "MEAN app experimentation",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node app"
+    },
+    "dependencies": {
+        "express": "4.15.2",
+        "mongoose": "4.9.5",
+        "bcryptjs": "2.4.3",
+        "cors": "2.8.3",
+        "jsonwebtoken": "7.3.0",
+        "body-parser": "1.17.1",
+        "passport": "0.3.2",
+        "passport-jwt": "2.2.1"
+    },
+    "author": "Raagh",
+    "license": "ISC"
+}
